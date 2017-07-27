@@ -1,0 +1,16 @@
+{
+  "name": "scriptings",
+  "version": "1.0.0",
+  "description": "some scripts to try to reduce works",
+  "main": "index.js",
+  "dependencies": {
+    "parse-gitignore": "^0.4.0",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "duy",
+  "license": "ISC"
+}
