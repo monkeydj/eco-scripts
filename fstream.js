@@ -1,10 +1,9 @@
-/**
- * a script for copying files
- */
+// a script for copying files
+// @updated 2017-08-03 09:43:00
 
 var path = require("path"), fs = require("fs");
 var constants = require("./constants.js");
-var source, destination, fileLists = new Map();
+var source, destination;
 
 const {
     IgnoreExts,
@@ -15,9 +14,31 @@ const {
 
 // expose things to parent module
 module.exports = {
-    source, destination, fileLists, beginStreaming,
-    constants, procedures: { start, normalize, copy }
+    source, destination, constants,
+    procedures: { start, normalize, copy }
 };
+
+/* ================================================================= */
+
+var files = require("yargs")
+    .options({
+        "d": { alias: ["dest", "destination"] }, // to new diẻctory
+        "s": { alias: ["sys", "system"], type: "array" }, // if copying system files
+        "e": { alias: ["eco", "ecosystem", "eco-service"], type: "array" }, // list of service
+        "f": { alias: ["file", "files"], type: "array" },  // same as normal file arguments
+    }).argv; !!CRY_YARGS && console.log(files);
+
+if (files.s) files._.push(...files.s.map(normalize("source/system")));
+if (files.f) files._.push(...files.f);
+
+!!CRY_YARGS && console.log(files._);
+if (!files._.length) return console.info("Nothing to do!");
+
+// start updating file in individual services
+for (let service of files.e) {
+    service = path.join(EcoRoot, EcoSpace, service);
+    startProcedure(Skeleton, service, files, redirect);
+}
 
 /* ================================================================= */
 
@@ -27,33 +48,6 @@ module.exports = {
  */
 function isGoodList(someArr) {
     return Array.isArray(someArr) && someArr.length > 0;
-}
-
-/**
- * add some files to streaming file lists
- * @param {array|string} files a string or a list of string represent some file(s)
- * @param {string} redirect redirect that 'files' in a new destination
- */
-function addToList(files, redirect = "") {
-
-    if (!isGoodList(files)) if (!!files) files = [String(files)]; else return;
-
-    for (let f of files) fileLists.set(f, redirect);
-
-}
-
-function beginStreaming() {
-
-    if (!source && !destination) throw new Error("Stream endpoints not set");
-    if (!isGoodList(fileLists)) throw new Error("Nothing to Stream in file list");
-
-    var multipleDests = isGoodList(destination);
-    if (multipleDests) {
-        multipleDests.forEach(eus => { // eus ~ ecosystem microservice
-            start(Skeleton, path.join(EcoRoot, eus), files._, files.d);
-        });
-    } else start(Foundation, Skeleton, files._, files.d);
-
 }
 
 /**
@@ -76,7 +70,7 @@ function startProcedure(source, destination, files, redirect) {
 /**
  * return a normalized, absolute path to a file
  * @param {string} dir prefix directory to following files
- * @param {string|undefined|null} get path result of a desired file
+ * @param {string|undefined|null} file get path result of a desired file
  */
 function normalize(dir, file) {
 
@@ -118,7 +112,7 @@ function copy(file, srcDir, destDir) {
      * @param {Error} err any error occured from creating file stream
      */
     function cleanUp(err) {
-        process.stdout.write(`>>> ${destination} ::`);
+        process.stdout.write(`>>> ${destination} ... `);
         if (err) console.error(err); else console.info(`OK!`);
     }
 
