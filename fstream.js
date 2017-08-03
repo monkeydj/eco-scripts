@@ -5,6 +5,8 @@ var path = require("path"), fs = require("fs");
 var constants = require("./constants.js");
 var source, destination;
 
+const { CRY_YARGS } = process.env;
+
 const {
     IgnoreExts,
     Foundation,
@@ -15,7 +17,7 @@ const {
 // expose things to parent module
 module.exports = {
     source, destination, constants,
-    procedures: { start, normalize, copy }
+    procedures: { startProcedure, normalize, copy }
 };
 
 /* ================================================================= */
