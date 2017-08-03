@@ -12,4 +12,5 @@ exports.IgnoresExts = [".md", ".js", ".json"];
 exports.Foundation = FOUNDATION || "F:/src/service-nodejs/";
 exports.Skeleton = SKELETON || "F:/src/micro-skeleton/";
 exports.EcoRoot = ECO_ROOT || "F:/src";
-exports.EcoSpace = ECO_SPACE;
+exports.EcoSpace = ECO_SPACE ||
+    function () { throw new Error("A space is a void anyway...") }();
