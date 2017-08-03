@@ -7,7 +7,7 @@ const {
     ECO_ROOT, ECO_SPACE,
     CRY_YARGS } = process.env; // extract environment variables
 
-exports.IgnoresExts = [".md", ".js", ".json"];
+exports.IgnoreExts = [".md", ".js", ".json"];
 // alter with default values when not specified
 exports.Foundation = FOUNDATION || "F:/src/service-nodejs/";
 exports.Skeleton = SKELETON || "F:/src/micro-skeleton/";

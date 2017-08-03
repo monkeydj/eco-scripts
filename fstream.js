@@ -39,7 +39,7 @@ if (!files._.length) return console.info("Nothing to do!");
 // start updating file in individual services
 for (let service of files.e) {
     service = path.join(EcoRoot, EcoSpace, service);
-    startProcedure(Skeleton, service, files, redirect);
+    startProcedure(Skeleton, service, files._, files.d);
 }
 
 /* ================================================================= */
